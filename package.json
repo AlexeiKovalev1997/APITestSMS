@@ -1,0 +1,20 @@
+{
+  "name": "AMD_SMS_API-Testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress open"
+  },
+  "author": "Alexei Kovalyov",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cypress-cucumber-preprocessor": "^4.0.1",
+    "cypress": "^7.7.0",
+    "cypress-cucumber-preprocessor": "^4.1.4",
+    "typescript": "^4.3.5"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  }
+}
