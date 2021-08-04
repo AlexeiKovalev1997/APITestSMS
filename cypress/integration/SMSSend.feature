@@ -85,3 +85,9 @@ Feature: SMS Send
     When I send SMS Campaigns
     Then I should have valid SMS response
     And Response time is less than 3000 ms
+
+  Scenario: SMS Campaigns with regulator with India
+    Given AccessRequest
+    When I send SMS Campaigns with regulator with India
+    Then I should have valid SMS Campaign India response
+    And Response time is less than 3000 ms

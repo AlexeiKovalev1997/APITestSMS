@@ -29,6 +29,9 @@ When('I send SMS without phone', () => {
 When('I send SMS Campaigns', () => {
     setSmsRequest(smsMethod.getSmsCampaignsRequest());
 });
+When('When I send SMS Campaigns with regulator with India', () => {
+    setSmsRequest(smsMethod.getSmsCampaignsIndiaRequest());
+});
 When('I send SMS with Invalid phone', () => {
     setSmsRequest(smsMethod.getSmsRequest(MessageEnum.ValidMessage,MessageEnum.InvalidPhone));
 });
@@ -75,5 +78,9 @@ Then('I should have valid SMS response with Callback', () => {
     smsMethod.SMSSendCallbackValidCheck();
 });
 Then('I should have valid SMS Campaigns', () => {
-    smsMethod.SMSSendCallbackValidCheck();
+    smsMethod.SMSSendCampaign();
 });
+Then('I should have valid SMS Campaign India response', () => {
+    smsMethod.SMSSendCampaign();
+});
+

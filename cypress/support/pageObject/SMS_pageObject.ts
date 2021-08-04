@@ -76,6 +76,35 @@ export class SMSMethods {
             failOnStatusCode: false
         };
     };
+    getSmsCampaignsIndiaRequest(){
+        return {
+            async: true,
+            crossDomain: true,
+            url: "http://apir.int.amdtelecom.net/sms/campaign",
+            method: "POST",
+            headers: {
+                authorization: `Bearer ${accessToken}`,
+                'content-type': "application/json"
+            },
+            processData: false,
+            body: {
+                "campaignName": setDate(),
+                "body": MessageEnum.ValidMessage, 
+                "to":[MessageEnum.ValidPhone],
+                "from": MessageEnum.ValidSender,
+                "flash": false,
+                "respectQuietHours": false,
+                "restrictions": {
+                    "india": {
+                        "templateId": "1234755000006",
+                        "entityId": "9876543000021"
+                    }
+                },
+         
+              },
+            failOnStatusCode: false
+        };
+    };
     getSmsCampaignsRequest(){
         return {
             async: true,
@@ -176,6 +205,22 @@ export class SMSMethods {
             expect(response.body.bodyAnalysis.characters).to.greaterThan(0)
             expect(response.body.bodyAnalysis).to.haveOwnProperty(MessageEnum.UnicodeProperty)
             expect(response.body.callback.strategy).to.eq(MessageEnum.ValidStrategyType)
+        });
+    };
+    SMSSendCampaign() {
+        cy.request(smsRequest).then((response) => {
+            expect(response.status).to.eq(MessageEnum.Status200)
+            expect(response.body.status).to.eq(MessageEnum.ValidQueuedStatus)
+            expect(response.body.body).to.eq(MessageEnum.ValidMessage)
+            expect(response.body.to).to.eq(MessageEnum.ValidPhone)
+            expect(response.body.from).to.eq(MessageEnum.ValidSender)
+            expect(response.body.flash).to.eq(false)
+            expect(response.body).to.haveOwnProperty(MessageEnum.TrackingIDProperty)
+            expect(response.body).to.haveOwnProperty(MessageEnum.CreatedAtProperty)
+            expect(response.body.bodyAnalysis.parts).to.greaterThan(0)
+            expect(response.body.bodyAnalysis.characters).to.greaterThan(0)
+            expect(response.body.bodyAnalysis).to.haveOwnProperty(MessageEnum.UnicodeProperty)
+           
         });
     };
     SMSSendInvalidBalanceCheck() {
