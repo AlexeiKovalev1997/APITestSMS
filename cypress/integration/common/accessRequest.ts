@@ -5,3 +5,6 @@ const accessMethod: AccessMethods = new AccessMethods();
 Given('AccessRequest', () => {
     accessMethod.getAccessToken();
 });
+Given('AccessRequest Insufficient Balance', () => {
+    accessMethod.getAccessTokenInsufficientBalance();
+});

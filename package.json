@@ -1,7 +1,7 @@
 {
-  "name": "AMD_SMS_API-Testing",
+  "name": "amd_sms_api-testing",
   "version": "1.0.0",
-  "description": "",
+  "description": "* Automated API tests for SMS sending\r * 1.0 v.",
   "main": "index.js",
   "scripts": {
     "test": "cypress open"
@@ -16,5 +16,13 @@
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexeiKovalev1997/APITestSMS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlexeiKovalev1997/APITestSMS/issues"
+  },
+  "homepage": "https://github.com/AlexeiKovalev1997/APITestSMS#readme"
 }

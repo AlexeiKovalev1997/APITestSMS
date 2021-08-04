@@ -8,6 +8,15 @@ const smsMethod: SMSMethods = new SMSMethods();
 When('I send SMS', () => {
     setSmsRequest(smsMethod.getSmsRequest());
 });
+When('I send SMS with shorten URL', () => {
+    setSmsRequest(smsMethod.getSmsRequest(MessageEnum.ValidMessage + ' ' + MessageEnum.urlShortener));
+});
+When('I send SMS with multiple parts', () => {
+    setSmsRequest(smsMethod.getSmsRequest(MessageEnum.ValidMessage.repeat(500)));
+});
+When('I send SMS with untranscode message', () => {
+    setSmsRequest(smsMethod.getSmsRequest(MessageEnum.TranscodeMessage));
+});
 When('I send SMS with Invalid token', () => {
     setAccessToken(MessageEnum.EmptyParam);
     setSmsRequest(smsMethod.getSmsRequest());
@@ -27,8 +36,23 @@ When('I send SMS without sender', () => {
 When('I send SMS with Invalid sender', () => {
     setSmsRequest(smsMethod.getSmsRequest(MessageEnum.ValidMessage,MessageEnum.ValidPhone,MessageEnum.InvalidPhone));
 });
+When('I send SMS with regulator with India', () => {
+    setSmsRequest(smsMethod.getSmsIndiaRequest());
+});
+Then('Response time is less than 3000 ms', () => {
+    smsMethod.AccessResponseTimeCheck();
+});
 Then('I should have valid SMS response', () => {
     smsMethod.SMSSendValidCheck();
+});
+Then('I should have valid urlShortener SMS response', () => {
+    smsMethod.SMSSendUrlShortenerValidCheck();
+});
+Then('I should have valid multiple parts SMS response', () => {
+    smsMethod.SMSSendMultiplePartsValidCheck();
+});
+Then('I should have valid transcode message SMS response', () => {
+    smsMethod.SMSSendTransecodeValidCheck();
 });
 Then('I should have Insufficient Balance error', () => {
     smsMethod.SMSSendInvalidBalanceCheck();

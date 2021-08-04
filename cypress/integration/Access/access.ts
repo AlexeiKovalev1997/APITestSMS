@@ -18,3 +18,6 @@ Then('I should have Authenticate response', () => {
 Then('I should have Authentication error response', () => {
     accessMethod.AccessInvalidBase64TokenCheck();
 });
+Then('Response time is less than 3000 ms', () => {
+    accessMethod.AccessResponseTimeCheck();
+});
