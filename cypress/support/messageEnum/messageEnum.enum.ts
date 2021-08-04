@@ -7,6 +7,7 @@ export enum MessageEnum {
     ValidSender='TestSender',
     ValidQueuedStatus='Queued',
     ValidTokenType='bearer',
+    ValidStrategyType='OnCompletion',
     UnicodeProperty='unicode',
     TrackingIDProperty='trackingId',
     CreatedAtProperty='createdAt',

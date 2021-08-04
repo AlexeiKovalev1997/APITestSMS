@@ -1,4 +1,4 @@
-import {accessToken, smsRequest} from "./global";
+import {accessToken, setDate, smsRequest} from "./global";
 import {MessageEnum} from "../messageEnum/messageEnum.enum";
 
 export class SMSMethods {
@@ -53,6 +53,55 @@ export class SMSMethods {
             failOnStatusCode: false
         };
     }
+    getSmsCallbackRequest(strategy: string = MessageEnum.ValidStrategyType){
+        return {
+            async: true,
+            crossDomain: true,
+            url: "http://apir.int.amdtelecom.net/sms",
+            method: "POST",
+            headers: {
+                authorization: `Bearer ${accessToken}`,
+                'content-type': "application/json"
+            },
+            processData: false,
+            body: {
+                "body": MessageEnum.ValidMessage,
+                "to": MessageEnum.ValidPhone,
+                "from": MessageEnum.ValidSender,
+                "callback": {
+                    "strategy": strategy,
+                  "url": MessageEnum.urlShortener
+                  }
+              },
+            failOnStatusCode: false
+        };
+    };
+    getSmsCampaignsRequest(){
+        return {
+            async: true,
+            crossDomain: true,
+            url: "http://apir.int.amdtelecom.net/sms/campaign",
+            method: "POST",
+            headers: {
+                authorization: `Bearer ${accessToken}`,
+                'content-type': "application/json"
+            },
+            processData: false,
+            body: {
+                "campaignName": setDate(),
+                "body": MessageEnum.ValidMessage, 
+                "to":[MessageEnum.ValidPhone],
+                "from": MessageEnum.ValidSender,
+                "flash": false,
+                "respectQuietHours": false,
+                "campaignCallback": {
+                "strategy": MessageEnum.ValidStrategyType,
+                "url": MessageEnum.urlShortener
+                }
+              },
+            failOnStatusCode: false
+        };
+    };
     SMSSendValidCheck() {
         cy.request(smsRequest).then((response) => {
             expect(response.status).to.eq(MessageEnum.Status200)
@@ -111,6 +160,22 @@ export class SMSMethods {
             expect(response.body.bodyAnalysis.parts).to.greaterThan(0)
             expect(response.body.bodyAnalysis.characters).to.greaterThan(0)
             expect(response.body.bodyAnalysis).to.haveOwnProperty(MessageEnum.UnicodeProperty)
+        });
+    };
+    SMSSendCallbackValidCheck() {
+        cy.request(smsRequest).then((response) => {
+            expect(response.status).to.eq(MessageEnum.Status200)
+            expect(response.body.status).to.eq(MessageEnum.ValidQueuedStatus)
+            expect(response.body.body).to.eq(MessageEnum.ValidMessage)
+            expect(response.body.to).to.eq(MessageEnum.ValidPhone)
+            expect(response.body.from).to.eq(MessageEnum.ValidSender)
+            expect(response.body.flash).to.eq(false)
+            expect(response.body).to.haveOwnProperty(MessageEnum.TrackingIDProperty)
+            expect(response.body).to.haveOwnProperty(MessageEnum.CreatedAtProperty)
+            expect(response.body.bodyAnalysis.parts).to.greaterThan(0)
+            expect(response.body.bodyAnalysis.characters).to.greaterThan(0)
+            expect(response.body.bodyAnalysis).to.haveOwnProperty(MessageEnum.UnicodeProperty)
+            expect(response.body.callback.strategy).to.eq(MessageEnum.ValidStrategyType)
         });
     };
     SMSSendInvalidBalanceCheck() {

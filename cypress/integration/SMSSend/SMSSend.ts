@@ -1,6 +1,5 @@
 import {Then, When} from "cypress-cucumber-preprocessor/steps";
 import {MessageEnum} from "../../support/messageEnum/messageEnum.enum";
-import {AccessMethods} from "../../support/pageObject/Access_pageObject";
 import {SMSMethods} from "../../support/pageObject/SMS_pageObject";
 import {setAccessToken, setSmsRequest, smsRequest} from "../../support/pageObject/global";
 
@@ -27,6 +26,9 @@ When('I send SMS without message', () => {
 When('I send SMS without phone', () => {
     setSmsRequest(smsMethod.getSmsRequest(MessageEnum.ValidMessage,MessageEnum.EmptyParam));
 });
+When('I send SMS Campaigns', () => {
+    setSmsRequest(smsMethod.getSmsCampaignsRequest());
+});
 When('I send SMS with Invalid phone', () => {
     setSmsRequest(smsMethod.getSmsRequest(MessageEnum.ValidMessage,MessageEnum.InvalidPhone));
 });
@@ -38,6 +40,9 @@ When('I send SMS with Invalid sender', () => {
 });
 When('I send SMS with regulator with India', () => {
     setSmsRequest(smsMethod.getSmsIndiaRequest());
+});
+When('I send SMS with Callback', () => {
+    setSmsRequest(smsMethod.getSmsCallbackRequest());
 });
 Then('Response time is less than 3000 ms', () => {
     smsMethod.AccessResponseTimeCheck();
@@ -65,4 +70,10 @@ Then('I should have Invalid value of a field', () => {
 });
 Then('I should have Invalid sender of a field', () => {
     smsMethod.SMSSendInvalidSenderCheck();
+});
+Then('I should have valid SMS response with Callback', () => {
+    smsMethod.SMSSendCallbackValidCheck();
+});
+Then('I should have valid SMS Campaigns', () => {
+    smsMethod.SMSSendCallbackValidCheck();
 });

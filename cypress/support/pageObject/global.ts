@@ -14,3 +14,7 @@ export let smsRequest: object;
 export function setSmsRequest(newValue: object) {
     smsRequest = newValue;
 }
+export let Date: Date;
+export function setDate(newValue?: Date) {
+    return Date = newValue;
+}
