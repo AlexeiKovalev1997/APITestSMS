@@ -1,51 +1,44 @@
-import {accessToken, Request} from "./global";
+import {accessToken, Request, setDate} from "./global";
 import {MessageEnum} from "../messageEnum/messageEnum.enum";
 
-export class SMSBodyRequest{
-    SMS(message: string = MessageEnum.ValidMessage, phone: string = MessageEnum.ValidPhone, sender: string = MessageEnum.ValidSender){
-       return { 
-            "body": message,
-            "to": phone,
-            "from": sender,
-            "urlShortener": {
-            "urlValidity": 3600
-          },
-            "label": sender,
-            "flash": true,
-            "transcode": "true"}
-    };
-    Callback(strategy: string = MessageEnum.ValidStrategyType){
+export class ViberBodyRequest{
+    Message(text:string = MessageEnum.ValidMessage, imageURL:string = MessageEnum.imageURL, targetUrl:string = MessageEnum.targetUrl, caption:string = "Go") {
         return {
-            "body": MessageEnum.ValidMessage,
-            "to": MessageEnum.ValidPhone,
-            "from": MessageEnum.ValidSender,
-            "callback": {
-                "strategy": strategy,
-                "url": MessageEnum.urlShortener
+            "text": text,
+            "imageURL": imageURL,
+            "action": {
+                "targetUrl": targetUrl,
+                "caption": caption
             }
-        };       
+        }
     };
-    India(){
+    Viber(name:any = setDate(), phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone], body:object = this.Message, ttl:number = 300){
+       return {
+        "campaignName": name,
+        "senderInfoTrackingId": "5a118a24-a279-4182-af63-3075914c7209",
+        "to": phone,
+        "body": body,
+        "ttl": ttl
+        }
+    };
+    ViberCallback(name:any = setDate(), phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone], body:object = this.Message, ttl:number = 300){
         return {
-            "body": MessageEnum.ValidMessage,
-            "restrictions": {
-            "india": {
-            "templateId": "1234755000006",
-            "entityId": "9876543000021"
-                    }
-                },
-            "to": MessageEnum.ValidPhone,
-            "from": MessageEnum.ValidSender
-                }
+        "campaignName": name,
+        "senderInfoTrackingId": "5a118a24-a279-4182-af63-3075914c7209",
+        "to": phone,
+        "body": body,
+        "ttl": ttl,
+        "callbackUrl": MessageEnum.urlShortener
+        }
     };
 };
-const BodyRequest = new SMSBodyRequest();
-export class SMSMethods {
-    getSmsRequest(Body: object = BodyRequest.SMS){
+const BodyRequest = new ViberBodyRequest();
+export class ViberMethods {
+    getViberRequest(Body: object = BodyRequest.Viber){
         return {
             async: true,
             crossDomain: true,
-            url: MessageEnum.SMSUrl,
+            url: MessageEnum.ViberUrl,
             method: "POST",
             headers: {
                 authorization: `Bearer ${accessToken}`,

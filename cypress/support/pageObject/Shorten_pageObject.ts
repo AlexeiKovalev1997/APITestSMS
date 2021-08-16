@@ -1,58 +1,31 @@
-import {accessToken, Request} from "./global";
+import {accessToken, Request, setDate} from "./global";
 import {MessageEnum} from "../messageEnum/messageEnum.enum";
 
-export class SMSBodyRequest{
-    SMS(message: string = MessageEnum.ValidMessage, phone: string = MessageEnum.ValidPhone, sender: string = MessageEnum.ValidSender){
-       return { 
-            "body": message,
-            "to": phone,
-            "from": sender,
-            "urlShortener": {
-            "urlValidity": 3600
-          },
-            "label": sender,
-            "flash": true,
-            "transcode": "true"}
-    };
-    Callback(strategy: string = MessageEnum.ValidStrategyType){
-        return {
-            "body": MessageEnum.ValidMessage,
-            "to": MessageEnum.ValidPhone,
-            "from": MessageEnum.ValidSender,
-            "callback": {
-                "strategy": strategy,
-                "url": MessageEnum.urlShortener
-            }
-        };       
-    };
-    India(){
-        return {
-            "body": MessageEnum.ValidMessage,
-            "restrictions": {
-            "india": {
-            "templateId": "1234755000006",
-            "entityId": "9876543000021"
-                    }
-                },
-            "to": MessageEnum.ValidPhone,
-            "from": MessageEnum.ValidSender
-                }
+export class ShortenBodyRequest{
+    Shorten(long_url:string = MessageEnum.ShortenLong_url, validity:string = MessageEnum.ShortenValidity, domain:string = MessageEnum.ShortenDomain, callbackUrl:string = MessageEnum.ShortenCallbackUrl, name:any = setDate()){
+       return {
+        "name": name,
+        "long_url": long_url,
+        "validity": validity,
+        "domain": domain,
+        "callbackUrl": callbackUrl
+      }
     };
 };
-const BodyRequest = new SMSBodyRequest();
-export class SMSMethods {
-    getSmsRequest(Body: object = BodyRequest.SMS){
+const BodyRequest = new ShortenBodyRequest();
+export class ShortenMethods {
+    getShortenRequest(number:number = 2, Body: object = BodyRequest.Shorten){
         return {
             async: true,
             crossDomain: true,
-            url: MessageEnum.SMSUrl,
+            url: MessageEnum.ShortenUrl,
             method: "POST",
             headers: {
                 authorization: `Bearer ${accessToken}`,
                 'content-type': "application/json"
             },
             processData: false,
-            body: Body,
+            body: Array(number).fill(Body,),
             failOnStatusCode: false
         };
     };

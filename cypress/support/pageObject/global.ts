@@ -10,11 +10,11 @@ export let assessRequest: object;
 export function setAssessRequest(newValue: object) {
     assessRequest = newValue;
 }
-export let smsRequest: object;
-export function setSmsRequest(newValue: object) {
-    smsRequest = newValue;
+export let Request: object;
+export function setRequest(newValue: object) {
+    const newLocal = Request = newValue;
 }
-export let Date: Date;
+export let currentDate: Date = new Date()
 export function setDate(newValue?: Date) {
-    return Date = newValue;
+    return currentDate = newValue;
 }

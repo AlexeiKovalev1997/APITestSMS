@@ -1,51 +1,80 @@
-import {accessToken, Request} from "./global";
+import {accessToken, setDate, Request} from "./global";
 import {MessageEnum} from "../messageEnum/messageEnum.enum";
 
-export class SMSBodyRequest{
-    SMS(message: string = MessageEnum.ValidMessage, phone: string = MessageEnum.ValidPhone, sender: string = MessageEnum.ValidSender){
-       return { 
-            "body": message,
-            "to": phone,
+export class SMSCampaignBodyRequest {
+    Campaigns(message: string = MessageEnum.ValidMessage, phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone], sender: string = MessageEnum.ValidSender){
+        return {
+            "campaignName": setDate(),
+            "body": message, 
+            "to" :phone,
             "from": sender,
-            "urlShortener": {
-            "urlValidity": 3600
-          },
             "label": sender,
             "flash": true,
-            "transcode": "true"}
-    };
-    Callback(strategy: string = MessageEnum.ValidStrategyType){
+            "transcode": "true",
+            "urlShortener": {
+                "urlStrategy": "MULTIPLE",
+                "urlValidity": 3600
+            }
+          }
+    }
+    CampaignsCallback(phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone]){
         return {
-            "body": MessageEnum.ValidMessage,
-            "to": MessageEnum.ValidPhone,
+            "campaignName": setDate(),
+            "body": MessageEnum.ValidMessage, 
+            "to" :phone,
             "from": MessageEnum.ValidSender,
+            "campaignCallback": {
+            "strategy": MessageEnum.ValidStrategyType,
+            "url": MessageEnum.urlShortener
+            },
             "callback": {
-                "strategy": strategy,
+                "strategy": MessageEnum.ValidStrategyType,
                 "url": MessageEnum.urlShortener
             }
-        };       
-    };
-    India(){
+          }
+    }
+    CampaignsIndia(){
         return {
-            "body": MessageEnum.ValidMessage,
+            "campaignName": setDate(),
+            "body": MessageEnum.ValidMessage, 
             "restrictions": {
-            "india": {
-            "templateId": "1234755000006",
-            "entityId": "9876543000021"
-                    }
-                },
-            "to": MessageEnum.ValidPhone,
+                "india": {
+                "templateId": "1234755000006",
+                "entityId": "9876543000021"
+                        }
+                    },
+            "to":[MessageEnum.ValidPhone, MessageEnum.ValidPhone],
             "from": MessageEnum.ValidSender
-                }
+          }
+    };
+    CampaignsCallbackGroup(){
+        return {
+            "campaignName": setDate(),
+            "body": MessageEnum.ValidMessage, 
+            "to":[MessageEnum.ValidGroup],
+            "from": MessageEnum.ValidSender,
+            "urlShortener": {
+                "urlStrategy": "MULTIPLE",
+                "urlValidity": 3600
+            },
+          "campaignCallback": {
+            "strategy": MessageEnum.ValidStrategyType,
+            "url": MessageEnum.urlShortener
+          },
+          "callback": {
+            "strategy": MessageEnum.ValidStrategyType,
+            "url": MessageEnum.urlShortener
+          }
+        }
     };
 };
-const BodyRequest = new SMSBodyRequest();
-export class SMSMethods {
-    getSmsRequest(Body: object = BodyRequest.SMS){
+const BodyRequest = new SMSCampaignBodyRequest();
+export class SMSCampaignMethods {
+    getSmsCampaignRequest(Body: object = BodyRequest.Campaigns){
         return {
             async: true,
             crossDomain: true,
-            url: MessageEnum.SMSUrl,
+            url: MessageEnum.CompaingUrl,
             method: "POST",
             headers: {
                 authorization: `Bearer ${accessToken}`,

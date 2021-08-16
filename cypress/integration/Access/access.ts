@@ -1,5 +1,5 @@
 import {When,Then} from "cypress-cucumber-preprocessor/steps";
-import {assessRequest, setAssessRequest, setBase64Token} from "../../support/pageObject/global";
+import {setAssessRequest, setBase64Token} from "../../support/pageObject/global";
 import {MessageEnum} from "../../support/messageEnum/messageEnum.enum";
 import {AccessMethods} from "../../support/pageObject/Access_pageObject";
 

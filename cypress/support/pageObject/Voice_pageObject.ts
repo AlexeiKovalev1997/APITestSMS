@@ -1,51 +1,56 @@
-import {accessToken, Request} from "./global";
+import {accessToken, setDate, Request} from "./global";
 import {MessageEnum} from "../messageEnum/messageEnum.enum";
 
-export class SMSBodyRequest{
-    SMS(message: string = MessageEnum.ValidMessage, phone: string = MessageEnum.ValidPhone, sender: string = MessageEnum.ValidSender){
-       return { 
-            "body": message,
-            "to": phone,
+export class VoiceBodyRequest{
+    Message(text:string = MessageEnum.ValidMessage, language:string = MessageEnum.USLanguageCode, gender:string = "female") {
+        return {
+            "text": text,
+            "language": language,
+            "gender":gender
+        }
+    };
+    Voice(message:object = this.Message(), phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone], sender: string = MessageEnum.ValidSender){
+       return {
+            "name": setDate(),
             "from": sender,
-            "urlShortener": {
-            "urlValidity": 3600
-          },
-            "label": sender,
-            "flash": true,
-            "transcode": "true"}
+            "to":phone,
+            "message": message
+        }
     };
-    Callback(strategy: string = MessageEnum.ValidStrategyType){
+    VoiceDTMF(message:string = MessageEnum.urlDTMF, phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone], sender: string = MessageEnum.ValidSender){
         return {
-            "body": MessageEnum.ValidMessage,
-            "to": MessageEnum.ValidPhone,
-            "from": MessageEnum.ValidSender,
-            "callback": {
-                "strategy": strategy,
+             "name": setDate(),
+             "from": sender,
+             "to":phone,
+             "collectDtmfDigits": "true",
+             "hangupDelay":19,
+             "fileURL": message
+         }
+     };
+     VoiceCallback(message:object = this.Message(), phone: Array<any> = [MessageEnum.ValidPhone, MessageEnum.ValidPhone], sender: string = MessageEnum.ValidSender){
+        return {
+             "name": setDate(),
+             "from": sender,
+             "to":phone,
+             "message": message,
+             "callback": {
+                "strategy": MessageEnum.ValidStrategyType,
                 "url": MessageEnum.urlShortener
-            }
-        };       
-    };
-    India(){
-        return {
-            "body": MessageEnum.ValidMessage,
-            "restrictions": {
-            "india": {
-            "templateId": "1234755000006",
-            "entityId": "9876543000021"
-                    }
-                },
-            "to": MessageEnum.ValidPhone,
-            "from": MessageEnum.ValidSender
-                }
-    };
+            },
+              "campaignCallback": {
+                "strategy": MessageEnum.ValidStrategyType,
+                "url": MessageEnum.urlShortener
+              }
+         }
+     };
 };
-const BodyRequest = new SMSBodyRequest();
-export class SMSMethods {
-    getSmsRequest(Body: object = BodyRequest.SMS){
+const BodyRequest = new VoiceBodyRequest();
+export class VoiceMethods {
+    getVoiceRequest(Body: object = BodyRequest.Voice){
         return {
             async: true,
             crossDomain: true,
-            url: MessageEnum.SMSUrl,
+            url: MessageEnum.VoiceUrl,
             method: "POST",
             headers: {
                 authorization: `Bearer ${accessToken}`,
